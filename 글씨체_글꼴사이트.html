@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글씨체 및 글꼴 변경</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .section label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .section input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        .section input[type="radio"] {
+            margin-right: 10px;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>글씨체 및 글꼴 변경</h1>
+
+    <div class="section">
+        <h2>글씨체</h2>
+        <label><input type="radio" name="fontStyle" value="bold">볼드체</label>
+        <label><input type="radio" name="fontStyle" value="italic">기울이기</label>
+        <label><input type="radio" name="fontStyle" value="underline">밑줄</label>
+        <label><input type="radio" name="fontStyle" value="strikethrough">취소선</label>
+        <label><input type="radio" name="fontStyle" value="monospace">고정 폭 폰트</label>
+        <label><input type="radio" name="fontStyle" value="highlight">하이라이트</label>
+        <label><input type="radio" name="fontStyle" value="heading">헤딩태그</label>
+        <label><input type="radio" name="fontStyle" value="" checked>아무 효과 없음</label>
+        <input type="text" id="customFontStyle" placeholder="기타 (직접 입력)">
+    </div>
+
+    <div class="section">
+        <h2>글꼴</h2>
+        <label><input type="radio" name="fontFamily" value="Arial, sans-serif" checked>Arial font</label>
+        <label><input type="radio" name="fontFamily" value="'Times New Roman', serif">Times New Roman font</label>
+        <label><input type="radio" name="fontFamily" value="'Courier New', monospace">Courier New font</label>
+        <input type="text" id="customFontFamily" placeholder="기타 (직접 입력)">
+    </div>
+
+    <div class="section">
+        <h2>이미지 추가</h2>
+        <label><input type="radio" name="addImage" value="none" checked>사용하지 않음</label>
+        <label><input type="radio" name="addImage" value="url">이미지 주소 입력</label>
+        <input type="text" id="imageUrl" placeholder="이미지 URL 입력">
+    </div>
+
+    <div class="section">
+        <h2>텍스트</h2>
+        <input type="text" id="inputText" placeholder="Hello World">
+    </div>
+
+    <button onclick="generateCode()">코드 만들기</button>
+
+    <div class="result-section">
+        <h2>결과</h2>
+        <textarea id="resultCode" rows="4" style="width: 100%;"></textarea>
+        <button onclick="copyToClipboard()">결과 복사</button>
+    </div>
+
+    <script>
+        function generateCode() {
+            const fontStyle = document.querySelector('input[name="fontStyle"]:checked').value || document.getElementById('customFontStyle').value;
+            const fontFamily = document.querySelector('input[name="fontFamily"]:checked').value || document.getElementById('customFontFamily').value;
+            const addImage = document.querySelector('input[name="addImage"]:checked').value;
+            const imageUrl = document.getElementById('imageUrl').value;
+            const inputText = document.getElementById('inputText').value;
+
+            let style = `font-family: ${fontFamily};`;
+            if (fontStyle === 'bold') {
+                style += ' font-weight: bold;';
+            } else if (fontStyle === 'italic') {
+                style += ' font-style: italic;';
+            } else if (fontStyle === 'underline') {
+                style += ' text-decoration: underline;';
+            } else if (fontStyle === 'strikethrough') {
+                style += ' text-decoration: line-through;';
+            } else if (fontStyle === 'monospace') {
+                style += ' font-family: monospace;';
+            } else if (fontStyle === 'highlight') {
+                style += ' background-color: yellow;';
+            } else if (fontStyle === 'heading') {
+                style = `font-family: ${fontFamily}; font-size: 2em;`;
+            }
+
+            let result = `<p style="${style}">${inputText}</p>`;
+
+            if (addImage === 'url' && imageUrl) {
+                result += `\n<img src="${imageUrl}" alt="image">`;
+            }
+
+            document.getElementById('resultCode').value = result;
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById('resultCode');
+            copyText.select();
+            document.execCommand('copy');
+            alert('코드가 클립보드에 복사되었습니다.');
+        }
+    </script>
+</body>
+</html>
